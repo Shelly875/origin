@@ -77,7 +77,8 @@ class HeketiServer(object):
             for line in fh.readlines():
                 sys.stderr.write("HEKETI-LOG: {}".format(line))
 
-    def wait_for_heketi(self):
+    @staticmethod
+    def wait_for_heketi():
         for _ in range(0, 30):
             time.sleep(1)
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -111,7 +112,8 @@ class UpgradeTestBase(unittest.TestCase):
     def tearDownClass(cls):
         cls.heketi.stop()
 
-    def heketi_client(self):
+    @staticmethod
+    def heketi_client():
         """Return a fully configured heketi client object ready for use
         with the current test server.
         """

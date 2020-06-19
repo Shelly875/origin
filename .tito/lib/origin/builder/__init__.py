@@ -15,7 +15,8 @@ class OriginBuilder(Builder):
     Used For:
         - Packages that want to know the commit in all situations
     """
-    def _get_tag_for_version(self, version):
+    @staticmethod
+    def _get_tag_for_version(version):
         return "v{}".format(version)
 
     def _get_rpmbuild_dir_options(self):
