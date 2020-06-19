@@ -39,7 +39,9 @@ class HeketiClient(object):
         self.verify = verify
         self.poll_delay = poll_delay
 
-    def _set_token_in_header(self, method, uri, headers={}):
+    def _set_token_in_header(self, method, uri, headers=None):
+        if headers is None:
+            headers = {}
         claims = {}
         claims['iss'] = self.user
 
@@ -67,12 +69,16 @@ class HeketiClient(object):
         r = requests.get(self.host + uri, headers=headers, verify=self.verify)
         return r.status_code == requests.codes.ok
 
-    def _make_request(self, method, uri, data={}, headers={}):
+    def _make_request(self, method, uri, data=None, headers=None):
         '''
         Ref:
         http://docs.python-requests.org
               /en/master/_modules/requests/api/#request
         '''
+        if data is None:
+            data = {}
+        if headers is None:
+            headers = {}
         headers.update(self._set_token_in_header(method, uri))
         r = requests.request(method,
                              self.host + uri,
@@ -109,15 +115,19 @@ class HeketiClient(object):
                 else:
                     return q
 
-    def cluster_create(self, cluster_options={}):
+    def cluster_create(self, cluster_options=None):
         ''' cluster_options is a dict with cluster creation options:
             https://github.com/heketi/heketi/wiki/API#cluster_create
         '''
+        if cluster_options is None:
+            cluster_options = {}
         req = self._make_request('POST', '/clusters', cluster_options)
         if req.status_code == requests.codes.created:
             return req.json()
 
-    def cluster_setflags(self, cluster_id, cluster_options={}):
+    def cluster_setflags(self, cluster_id, cluster_options=None):
+        if cluster_options is None:
+            cluster_options = {}
         uri = "/clusters/" + cluster_id + "/flags"
         req = self._make_request('POST', uri, cluster_options)
         return req.status_code == requests.codes.ok
@@ -139,11 +149,13 @@ class HeketiClient(object):
         req = self._make_request('DELETE', uri)
         return req.status_code == requests.codes.ok
 
-    def node_add(self, node_options={}):
+    def node_add(self, node_options=None):
         '''
         node_options is a dict consisting of paramters for
         adding a node: https://github.com/heketi/heketi/wiki/API#add-node
         '''
+        if node_options is None:
+            node_options = {}
         uri = "/nodes"
         req = self._make_request('POST', uri, node_options)
         if req.status_code == requests.codes.ok:
@@ -160,7 +172,9 @@ class HeketiClient(object):
         req = self._make_request('DELETE', uri)
         return req.status_code == requests.codes.NO_CONTENT
 
-    def node_state(self, node_id, state_request={}):
+    def node_state(self, node_id, state_request=None):
+        if state_request is None:
+            state_request = {}
         uri = '/nodes/' + node_id + '/state'
         req = self._make_request('POST', uri, state_request)
         return req.status_code == requests.codes.NO_CONTENT
@@ -179,11 +193,13 @@ class HeketiClient(object):
         req = self._make_request('POST', uri, tags_options)
         return req.status_code == requests.codes.ok
 
-    def device_add(self, device_options={}):
+    def device_add(self, device_options=None):
         ''' device_options is a dict with parameters to be passed \
             in the json request: \
             https://github.com/heketi/heketi/wiki/API#add-device
         '''
+        if device_options is None:
+            device_options = {}
         uri = '/devices'
         req = self._make_request('POST', uri, device_options)
         return req.status_code == requests.codes.NO_CONTENT
@@ -199,7 +215,9 @@ class HeketiClient(object):
         req = self._make_request('DELETE', uri)
         return req.status_code == requests.codes.NO_CONTENT
 
-    def device_state(self, device_id, state_request={}):
+    def device_state(self, device_id, state_request=None):
+        if state_request is None:
+            state_request = {}
         uri = "/devices/" + device_id + "/state"
         req = self._make_request('POST', uri, state_request)
         return req.status_code == requests.codes.NO_CONTENT
@@ -223,10 +241,12 @@ class HeketiClient(object):
         req = self._make_request('POST', uri, tags_options)
         return req.status_code == requests.codes.ok
 
-    def volume_create(self, volume_options={}):
+    def volume_create(self, volume_options=None):
         ''' volume_options is a dict with volume creation options:
             https://github.com/heketi/heketi/wiki/API#create-a-volume
         '''
+        if volume_options is None:
+            volume_options = {}
         uri = '/volumes'
         req = self._make_request('POST', uri, volume_options)
         if req.status_code == requests.codes.ok:
@@ -244,7 +264,9 @@ class HeketiClient(object):
         if req.status_code == requests.codes.ok:
             return req.json()
 
-    def volume_expand(self, volume_id, expand_size={}):
+    def volume_expand(self, volume_id, expand_size=None):
+        if expand_size is None:
+            expand_size = {}
         uri = '/volumes/' + volume_id + '/expand'
         req = self._make_request('POST', uri, expand_size)
         if req.status_code == requests.codes.ok:
@@ -267,7 +289,9 @@ class HeketiClient(object):
         if req.status_code == requests.codes.ok:
             return req.json()
 
-    def block_volume_create(self, volume_options={}):
+    def block_volume_create(self, volume_options=None):
+        if volume_options is None:
+            volume_options = {}
         uri = '/blockvolumes'
         req = self._make_request('POST', uri, volume_options)
         if req.status_code == requests.codes.ok:
