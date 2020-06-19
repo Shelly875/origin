@@ -67,7 +67,8 @@ class HeketiServer(object):
             for line in fh.readlines():
                 sys.stderr.write("HEKETI-LOG: {}".format(line))
 
-    def wait_for_heketi(self):
+    @staticmethod
+    def wait_for_heketi():
         for _ in range(0, 30):
             time.sleep(1)
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

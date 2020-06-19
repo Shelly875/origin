@@ -39,7 +39,8 @@ class OriginTagger(VersionTagger):
         inject_os_git_vars(self.spec_file)
         super(OriginTagger, self)._tag_release()
 
-    def _get_tag_for_version(self, version, release=None):
+    @staticmethod
+    def _get_tag_for_version(version, release=None):
         if release is None:
             return "v{}".format(version)
         else:
