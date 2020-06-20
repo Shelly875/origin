@@ -105,7 +105,6 @@ def examine_volumes(cli):
             header=(not cli.no_header),
             show_pending=(cli.pending),
             skip_block=cli.skip_block)
-    return
 
 
 def examine_bricks(cli):

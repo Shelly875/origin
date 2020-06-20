@@ -203,7 +203,6 @@ class TestPostUpgrade(UpgradeTestBase):
             self.assertIn("devices", res)
             device_ids = sorted(d['id'] for d in res['devices'])
             self.assertEqual(devices, device_ids)
-        return
 
     def test_cluster_flags(self):
         # Here we are looking to see if the heketi 4.0 db we are started
